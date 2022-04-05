@@ -3,6 +3,8 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from PIL import Image
+from io import BytesIO
 from datetime import datetime
 import time
 
@@ -27,7 +29,18 @@ def start():
 
         dt_string = now.strftime("%d/%m/%Y %H:%M:%S").replace(" ", "_").replace("/", "_").replace(":", "_")
         time.sleep(1)
-        driver.save_screenshot(f'{dt_string}.png')
+        png = driver.get_screenshot_as_png()
+
+        im = Image.open(BytesIO(png))
+
+        left = 456
+        top = 209
+        right = 1842
+        bottom = 842
+
+
+        im = im.crop((left, top, right, bottom))
+        im.save(f'{dt_string}.png')
         print("saved screenshot...")
         time.sleep(600)
 
