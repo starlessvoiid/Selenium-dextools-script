@@ -3,20 +3,32 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from datetime import datetime
 import time
 
-driver = webdriver.Chrome(executable_path = "chromedriver.exe")
+op = webdriver.ChromeOptions()
+op.add_argument("--window-size=1920x1080")
+driver = webdriver.Chrome(executable_path = "chromedriver.exe", options=op)
 
 driver.get("https://www.dextools.io/app/bsc/pair-explorer/0x310ce2c28a74000904c44cbb523e3ffb0c0325a9")
+driver.maximize_window()
+
+now = datetime.now()
 
 def start():
+    btn1 = WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.XPATH, '/html/body/ngb-modal-window/div/div/app-video-yt-modal/div[1]/button')))
+    btn1.click()
+    btn2 = WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.XPATH, '/html/body/app-root/div/div/main/app-exchange/div/app-pairexplorer/app-layout/div/div/div/div[3]/app-favorites-list/div/div[1]/div/button')))
+    btn2.click()
+    time.sleep(4)
+    driver.execute_script("window.scrollTo(0, 240)")
+    time.sleep(5)
+    while True :
 
-    try :
-        time.sleep(10)
-        btn1 = WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/div/div[1]/div/div[2]/div[4]/div[1]/div[3]/div[1]/span/div/i')))
-        btn1.click()
-        time.sleep(10)
-        b2 =
+        dt_string = now.strftime("%d/%m/%Y %H:%M:%S").replace(" ", "_").replace("/", "_").replace(":", "_")
+        time.sleep(1)
+        driver.save_screenshot(f'{dt_string}.png')
+        print("saved screenshot...")
+        time.sleep(600)
 
-    except :
-        print("Oups, something went wrong...")
+start()
